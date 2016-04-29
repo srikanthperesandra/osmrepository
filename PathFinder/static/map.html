@@ -1,0 +1,43 @@
+<html>
+<head>
+<!-- {{url_for('static', filename='scripts/leaflet/leaflet.css')}} -->
+<link rel="stylesheet" href="scripts/leaflet/leaflet.css" />
+<link rel="stylesheet" href="scripts/leafletRouting/leaflet-routing-machine.css" />
+<script src="scripts/leaflet/leaflet.js"></script>
+<script src ="scripts/leafletRouting/leaflet-routing-machine.js"></script>
+<script src ="scripts/leafletRouting/leaflet-routing-mapbox.js"></script>
+<script src="scripts/jquery/jquery-2.0.2.min.js"></script>
+<script src="scripts/pFinderWidget.js"></script>
+<style type="text/css">
+body {
+	padding: 0;
+	margin: 0;
+}
+html, body, #bwMap {
+	height: 100%;
+}
+</style>
+</head>
+<body>
+<div id="bwMap"></div>
+<script type="text/javascript">
+
+	window.onload=function(){
+		
+		//alert(pfWidget);
+		
+		try{
+			pfWidget.plotMap();
+			if (location.search !=  undefined &&
+					 location.search != null &&
+					 location.search != "")
+				 //alert(location.search);
+				pfWidget.addRoute(location.search);
+		}catch (err){
+			alert(err);
+		}
+	}
+
+</script>
+</body>
+</html>

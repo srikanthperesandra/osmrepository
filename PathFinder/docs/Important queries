@@ -1,0 +1,12 @@
+# Relations defining route as road
+db.relations.find({"$where":"this.metaData.type==\"route\" && this.metaData.route==\"road\""})
+
+# Routes of Zollernalbkreis 
+db.relations.find({"$where":"this.metaData.type==\"route\" && this.metaData.route==\"road\" && this.metaData.operator==\"Zollernalbkreis\""})
+
+
+#Graphhoper Keys
+2c9f274a-b7a1-4bb5-9893-19f8712f9a16
+
+#Graphopper Pedestrian Service
+https://graphhopper.come

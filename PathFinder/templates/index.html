@@ -1,0 +1,41 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="static/scripts/jqwidgets/styles/jqx.base.css">
+<link rel="stylesheet" type="text/css" href="static/scripts/jqwidgets/styles/jqx.ui-sunny.css">
+<script type="text/javascript" src="static/scripts/jquery/jquery-2.0.2.min.js"></script>
+<script type="text/javascript" src="static/scripts/jqwidgets/jqxcore.js"></script>
+<script type="text/javascript" src="static/scripts/jqwidgets/jqxdata.js"></script>
+<script type="text/javascript" src="static/scripts/jqwidgets/jqxinput.js"></script>
+<script type="text/javascript" src="static/scripts/jqwidgets/jqxbuttons.js"></script>
+<script type="text/javascript" src="static/scripts/pFinderWidget.js"></script>
+</head>
+<body>
+<div>
+<table>
+<tr><td><img src="static/images/route.png"/></td>
+<td>
+<table  style="float:">
+<tr><td><input type="text" id="source"/></td><td>&nbsp;-&nbsp;</td>
+<td><input type="text" id="destination"/></td><td>&nbsp;</td>
+<td><input type="button" id="go" value="Go"></input></td></tr>
+</table>
+</td>
+</tr>
+</table>
+</div>
+<div>
+<iframe src="static/map.html" height="90%" width="80%" id="mapArea" style="border-style:groove;border-width:thin"></iframe>
+</div>
+</body>
+<script type="text/javascript">
+window.onload=function(){
+	try{
+		pfWidget.init()
+		pfWidget.invokeStreetsService()
+	}catch(err){
+		alert(err);
+	}
+}
+
+</script>
+</html>
