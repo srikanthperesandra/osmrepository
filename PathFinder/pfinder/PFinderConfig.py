@@ -19,7 +19,7 @@ dbGraph = "graph"
 dbCoordsCollection = "coords"
 dbFSPResult = "fspResult"
 
-downArrowImage = "/home/srikanth/Msc/Sem3/OSM/workspace/PathFinder/images/arrow_down.png"
+downArrowImage = "/home/srikanth/git/osmrepositoryV1/PathFinder/images/arrow_down.png"
 #dbClusterGraph = "cGraph"
 #dbClusterEdges = "cEdges"
 dbClusterGraph = "cGraph_V1"

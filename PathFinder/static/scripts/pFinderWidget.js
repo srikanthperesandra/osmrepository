@@ -23,15 +23,22 @@ var pfWidget = (function(){
 				source:[],
 				srcLocation:null,
 				destLocation:null,
+				altPoints:null,
 				appConfig:{
 					sEndpoint:"/api/v1",
 					streetService:"/streets",
 					pathService:"/path",
+					pathAlternateService:"/path/alternatives",
 					MAPBOX_KEY: "pk.eyJ1Ijoic3Jpa2FudGhwZXJlc2FuZHJhIiwiYSI6ImNpbmtkeGE3NjAwN2N3N2tsd3QzdTdveHcifQ.foQHZKPnsWsoGer49vc_MQ"
 				},
 				init:function(){
 					var thisRef = this;
 					var src = document.getElementById("mapArea").src;
+					document.getElementById("alternatives").onclick=function(){
+						//alert("called");
+						thisRef.showAlternates()
+					};
+					
 					document.getElementById("go").onclick=function(){
 						//alert(thisRef.srcLocation);
 						//alert(thisRef.destLocation);
@@ -51,11 +58,95 @@ var pfWidget = (function(){
 							}
 							document.getElementById("mapArea").src=src+query;
 							
+							//alert("reached1");
+							
+							
 						}).fail(function(err){
 							alert(JSON.stringify(err));
 						})
+							
+						
 					
 				 }
+				},
+				showAlternates:function(){
+					var thisRef= this;
+					
+					$('#loader').jqxLoader({width:100,height:60,imagePosition:'top',theme:thisRef.theme});
+					document.getElementById("loader").style.display="block";
+					document.getElementById("altPaths").style.display="none";
+					//if($('#altPaths').jqxTree('getInstance')==undefined ||$('#altPaths').jqxTree('getInstance')==null)
+						//document.getElementById("altPaths").innerHTML = "<p style='font-size:10pt;font-weight:bold;font-family:sans'>Loading alternate paths, please wait....</p>"
+					$.get(thisRef.appConfig.sEndpoint+thisRef.appConfig.pathAlternateService+"?src="+thisRef.srcLocation+"&dest="+thisRef.destLocation).done(function(data){
+						//alert(JSON.stringify(data));
+						//thisRef.addRoute(data);
+						//.addRoute(data);
+						//document.getElementById("altPaths").innerHTML=JSON.stringify(data);
+						try{
+							var source=thisRef.buildTreeSource(data);
+							document.getElementById("loader").style.display="none";
+							document.getElementById("altPaths").style.display="block";
+							$('#altPaths').jqxTree({ source: source, width:'auto',theme:thisRef.theme});
+							$('#altPaths .jqx-tree-item').click(function(event){
+								try{
+									//alert("called");
+									var item = event.target.innerHTML;
+									//var item1 = $('#altPaths').jqxTree('getItem',item)
+									//alert(item1)
+									var points = thisRef.altPoints[item];
+									if(points==null||undefined)
+										return;
+									query="?points="
+									//var src = document.getElementById("mapArea").src;
+									for(var i=0;i<points.length;i++){
+										var temp=JSON.stringify([points[i]['lng'],points[i]['lat']])
+										if(i==points.length-1){
+											query=query+temp;
+										}else{
+											query=query+temp+"|";
+										}
+									}
+									document.getElementById("mapArea").src="static/map.html"+query;
+									
+								}catch(err){
+									alert(err);
+								}
+							});
+						}catch(err){
+							alert(err);
+						}
+						 //$('#alertsTreeGrid').jqxTree({ source: source, height: '500px', width:'100%', theme:appConfig.theme});
+						//alert("reached2");
+					}).fail(function(err){
+						alert(JSON.stringify(err));
+					})
+				},
+				
+				buildTreeSource:function(data){
+					var thisRef = this;
+					var source = new Array();
+					thisRef.altPoints = new Object()
+					
+					$.each(data,function(index,node){
+						var temp = new Object();
+						temp.label = "Route "+(index+1)+"- "+(parseFloat(node.distance)/1000)+" km";
+						temp.items =[];
+						//var routes_description = "<ul>";
+						var tempItems=[]
+						for(var i=0;i<node.routes.length;i++){
+							var tempMetadata=node.routes[i].metaData
+							//routes_description+="<li>"+tempMetadata.name+", Operated by: "+tempMetadata.operator+"</li>";
+							tempItems.push({"label":tempMetadata.name+", Operated by: "+tempMetadata.operator});
+						}
+						temp.items.push({"label":"Order of Visit",items:tempItems})
+						//temp.items.push({"label":"Visualize_Route_"+(i+1)})
+						//routes_description+="</ul>";
+						thisRef.altPoints[temp.label]=node.points
+						//temp.expanded = true;
+						source.push(temp);
+					});
+					return source;
+					
 				},
 				prepareWidgets:function(){
 					//alert("called");
@@ -69,6 +160,7 @@ var pfWidget = (function(){
 					 $("#source").jqxInput({ theme: thisRef.theme, placeHolder: " Source",minLength: 1, source:thisRef.source,height:'25' });
 					 $("#destination").jqxInput({ theme: thisRef.theme, placeHolder: " Destination", minLength: 1, source:thisRef.source ,height:'25' });
 					 $("#go").jqxButton({ theme: thisRef.theme, enableHover: false });
+					 $("#alternatives").jqxButton({ theme: thisRef.theme, enableHover: false });
 					 $("#source").on("select",function(event){
 						 var item = event.args.item;
 						 thisRef.srcLocation = item.value;

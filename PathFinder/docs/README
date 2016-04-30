@@ -1,0 +1,41 @@
+'##########################################
+Author: Srikanth Peresandra Lakshminarayana
+Email: srikanthperesandra@gmail.com
+Prioject:PathFinder/pFinder/Pedestrian Finder
+##########################################
+
+-----------------------------------
+Parser Execution
+----------------------------------
+ python pfinder.ParseOSMpbf.py <callback_type>
+ Example:
+   python pfinder.ParseOSMpbf.py nodes_callback
+      
+      nodes_callback| ways_callback| relations_callback | coords_callback
+      
+      nodes_callback - Specifies parser to parse nodes
+      ways_callback - Specifies parser to parse ways
+      relations_callback - Specifies parser to parse relations
+      coords_callback - Specifies parser to parse coordinates
+      
+-------------------------------------
+First Variant Implementation
+-------------------------------------
+python ui.PFinderBootstrapWidget.py
+
+
+-------------------------------------
+Second Variant Implementation
+-------------------------------------
+1. python app.py
+2. load http://127.0.0.1:5000 on browser
+
+
+-------------------------------------
+REST API End Points
+-------------------------------------
+/api/v1/streets                                                       - Api End point to access Streets Information
+/api/v1/path?src=src_street_osmid&dest=dest_street_osmid              - Api End point to access SPFA routing service 
+                                                                        to fetch Pedestrian route   
+/api/v1/path/alternatives?src=src_street_osmid&dest=dest_street_osmid - Api End point to access SPFA routing service 
+                                                                        to fetch alternative routes

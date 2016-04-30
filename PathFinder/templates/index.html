@@ -7,6 +7,10 @@
 <script type="text/javascript" src="static/scripts/jqwidgets/jqxdata.js"></script>
 <script type="text/javascript" src="static/scripts/jqwidgets/jqxinput.js"></script>
 <script type="text/javascript" src="static/scripts/jqwidgets/jqxbuttons.js"></script>
+<script type="text/javascript" src="static/scripts/jqwidgets/jqxscrollbar.js"></script>
+<script type="text/javascript" src="static/scripts/jqwidgets/jqxpanel.js"></script>
+<script type="text/javascript" src="static/scripts/jqwidgets/jqxtree.js"></script>
+<script type="text/javascript" src="static/scripts/jqwidgets/jqxloader.js"></script>
 <script type="text/javascript" src="static/scripts/pFinderWidget.js"></script>
 </head>
 <body>
@@ -17,14 +21,18 @@
 <table  style="float:">
 <tr><td><input type="text" id="source"/></td><td>&nbsp;-&nbsp;</td>
 <td><input type="text" id="destination"/></td><td>&nbsp;</td>
-<td><input type="button" id="go" value="Go"></input></td></tr>
+<td><input type="button" id="go" value="Go"></input>&nbsp;<input type="button" id="alternatives" value="Alternative Routes"></input></td></tr>
 </table>
 </td>
 </tr>
 </table>
 </div>
 <div>
-<iframe src="static/map.html" height="90%" width="80%" id="mapArea" style="border-style:groove;border-width:thin"></iframe>
+<iframe src="static/map.html" height="90%" width="60%" id="mapArea" style="border-style:groove;border-width:thin;float:left"></iframe>
+<div>
+<div id="loader" style="display:none"></div>
+<div id="altPaths" style="overflow:scroll;height:90%"></div>
+</div>
 </div>
 </body>
 <script type="text/javascript">
