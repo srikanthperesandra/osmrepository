@@ -8,6 +8,9 @@ from imposm.parser import OSMParser
 from datastructure.Graph import Graph
 from datastructure.Node import Node
 from datastructure.Point import Point
+from datastructure.Edge import Edge
+from datastructure.util.HaversianCalculator import Haversian
+from datastructure.Street import Street
 class OSMPbfParserImpl:
     def __init__(self,interface,osmPbfFile,callback_type=None,repository=None):
         #print(IOSMPbfParser)#
@@ -37,8 +40,20 @@ class OSMPbfParserImpl:
             Graph.getInstance().addNode(osmId,Node(osmId,meta_data,coords))
         #print(len(Graph.getInstance().getNodes()))
     def fetchWays(self,ways_tuple,collection=None):
+        nodes = Graph.getInstance().getNodes().keys()
+        nodes_all = Graph.getInstance().getNodes()
         for osmId, meta_data,refs in ways_tuple:
-                print (osmId)
+            refs_set =set(refs)
+            #print ('Refs who are nodes')
+            common_nodes=list(refs_set.intersection(nodes))
+            if len(common_nodes)>1:
+                street_edges = []
+                for i in range(0,len(common_nodes)-1):
+                    edge = Edge(Haversian.getInstance().calculateDistance(nodes_all[common_nodes[i]].getCoords(),nodes_all[common_nodes[i+1]].getCoords()),common_nodes[i],common_nodes[i+1])
+                    #print('Haversian distance from '+str(common_nodes[i])+", "+str(common_nodes[i+1]))
+                    #print(edge.getDistance())
+                    street_edges.append(edge)
+                Graph.getInstance().addStreet(osmId, Street(osmId,meta_data,street_edges))
         
     def fetchCoords(self,coords_tuple):
         graph=Graph.getInstance()

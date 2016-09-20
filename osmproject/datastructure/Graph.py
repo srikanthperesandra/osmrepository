@@ -17,6 +17,8 @@ class Graph(object):
         self.coords[osmId]=point
     def getPoints(self):
         return self.coords
+    def addStreet(self,streetId,street):
+        self.streets[streetId] = street
     @staticmethod
     def getInstance():
         if __class__._gInstance == None:
